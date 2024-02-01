@@ -6,31 +6,35 @@ import (
 
 type Aws struct{}
 
-// example usage: "dagger call container-echo --string-arg yo"
-func (m *Aws) ContainerEcho(stringArg string) *Container {
-	return dag.Container().From("alpine:latest").WithExec([]string{"echo", stringArg})
-}
-
-// example usage: "dagger call grep-dir --directory-arg . --pattern GrepDir"
-func (m *Aws) GrepDir(ctx context.Context, directoryArg *Directory, pattern string) (string, error) {
-	return dag.Container().
-		From("alpine:latest").
-		WithMountedDirectory("/mnt", directoryArg).
-		WithWorkdir("/mnt").
-		WithExec([]string{"grep", "-R", pattern, "."}).
-		Stdout(ctx)
-}
-
 // example usage: "dagger call get-secret --aws-credentials ~/.aws/credentials"
 func (m *Aws) GetSecret(ctx context.Context, awsCredentials *File) (string, error) {
-	credsFile, err := awsCredentials.Contents(ctx)
+	ctr, err := m.WithAwsSecret(ctx, dag.Container().From("ubuntu:latest"), awsCredentials)
 	if err != nil {
 		return "", err
 	}
+	return ctr.
+		WithExec([]string{"bash", "-c", "cat /root/.aws/credentials |base64"}).
+		Stdout(ctx)
+}
+
+func (m *Aws) WithAwsSecret(ctx context.Context, ctr *Container, awsCredentials *File) (*Container, error) {
+	credsFile, err := awsCredentials.Contents(ctx)
+	if err != nil {
+		return nil, err
+	}
 	secret := dag.SetSecret("aws-credential", credsFile)
-	return dag.Container().
-		From("ubuntu:latest").
-		WithMountedSecret("/secret", secret).
-		WithExec([]string{"bash", "-c", "cat secret |base64"}).
+	return ctr.WithMountedSecret("/root/.aws/credentials", secret), nil
+}
+
+// example usage: "dagger call list --aws-credentials ~/.aws/credentials"
+func (m *Aws) List(ctx context.Context, awsCredentials *File) (string, error) {
+	ctr := dag.Container().
+		From("public.ecr.aws/aws-cli/aws-cli:latest")
+	ctr, err := m.WithAwsSecret(ctx, ctr, awsCredentials)
+	if err != nil {
+		return "", err
+	}
+	return ctr.
+		WithExec([]string{"s3", "ls"}).
 		Stdout(ctx)
 }
