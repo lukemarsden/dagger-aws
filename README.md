@@ -24,7 +24,7 @@ Check `region` and `aws-account-id` arguments and update them to match your AWS 
 
 Make sure you've created the repo in your ECR account. You can do that under Amazon ECR --> Private registry --> Repositories in the AWS console.
 
-### From Dagger Code
+## From Dagger Code
 
 Call the EcrPush method on this module with the awsCredentials *File (e.g. ~/.aws/credentials) as the first argument, then the region, awsAccountId and repo as strings, then finally the container you wish to push as the final argument.
 
