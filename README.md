@@ -11,6 +11,8 @@ dagger call -m github.com/lukemarsden/dagger-aws list --aws-credentials ~/.aws/c
 
 ## Push Image to Private ECR Repo
 
+This module lets you push container images from Dagger to ECR without having to manually configure docker with ECR credentials. It will fetch them automatically behind the scenes.
+
 From CLI, to push `ubuntu:latest` to a given ECR repo, by way of example:
 
 ```
