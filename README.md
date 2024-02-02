@@ -20,7 +20,7 @@ dagger call -m github.com/lukemarsden/dagger-aws \
     --aws-account-id 12345 --repo test
 ```
 
-Check `region` and `aws-account-id` arguments and update them to match your AWS account and location of your priavte repo. Update `repo` to the name of your repo.
+Check `region` and `aws-account-id` arguments and update them to match your AWS account and location of your private repo. Update `repo` to the name of your repo.
 
 Make sure you've created the repo in your ECR account. You can do that under Amazon ECR --> Private registry --> Repositories in the AWS console.
 
