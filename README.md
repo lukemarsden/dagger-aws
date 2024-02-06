@@ -1,6 +1,6 @@
 # Dagger AWS module
 
-Known to work with Dagger v0.9.5.
+Known to work with Dagger v0.9.5 and v0.9.8.
 
 ## S3 List
 
