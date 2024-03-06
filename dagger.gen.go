@@ -4859,46 +4859,6 @@ func invoke(ctx context.Context, parentJSON []byte, parentName string, fnName st
 	switch parentName {
 	case "Aws":
 		switch fnName {
-		case "ContainerEcho":
-			var parent Aws
-			err = json.Unmarshal(parentJSON, &parent)
-			if err != nil {
-				fmt.Println(err.Error())
-				os.Exit(2)
-			}
-			var stringArg string
-			if inputArgs["stringArg"] != nil {
-				err = json.Unmarshal([]byte(inputArgs["stringArg"]), &stringArg)
-				if err != nil {
-					fmt.Println(err.Error())
-					os.Exit(2)
-				}
-			}
-			return (*Aws).ContainerEcho(&parent, stringArg), nil
-		case "GrepDir":
-			var parent Aws
-			err = json.Unmarshal(parentJSON, &parent)
-			if err != nil {
-				fmt.Println(err.Error())
-				os.Exit(2)
-			}
-			var directoryArg *Directory
-			if inputArgs["directoryArg"] != nil {
-				err = json.Unmarshal([]byte(inputArgs["directoryArg"]), &directoryArg)
-				if err != nil {
-					fmt.Println(err.Error())
-					os.Exit(2)
-				}
-			}
-			var pattern string
-			if inputArgs["pattern"] != nil {
-				err = json.Unmarshal([]byte(inputArgs["pattern"]), &pattern)
-				if err != nil {
-					fmt.Println(err.Error())
-					os.Exit(2)
-				}
-			}
-			return (*Aws).GrepDir(&parent, ctx, directoryArg, pattern)
 		default:
 			return nil, fmt.Errorf("unknown function %s", fnName)
 		}
