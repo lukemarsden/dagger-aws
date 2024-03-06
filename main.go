@@ -67,7 +67,7 @@ func (m *Aws) EcrPushExample(ctx context.Context, awsCredentials *File, region, 
 	return m.EcrPush(ctx, awsCredentials, region, awsAccountId, repo, ctr)
 }
 
-func (m *Aws) EcrPush(ctx context.Context, awsCredentials *File, region, awsAccountId, repo string, ctr *Container) (string, error) {
+func (m *Aws) EcrPush(ctx context.Context, awsCredentials *File, region, awsAccountId, repo string, pushCtr *Container) (string, error) {
 	// Get the ECR login password so we can authenticate with Publish WithRegistryAuth
 	ctr, err := m.AwsCli(ctx, awsCredentials)
 	if err != nil {
@@ -83,5 +83,5 @@ func (m *Aws) EcrPush(ctx context.Context, awsCredentials *File, region, awsAcco
 	ecrHost := fmt.Sprintf("%s.dkr.ecr.%s.amazonaws.com", awsAccountId, region)
 	ecrWithRepo := fmt.Sprintf("%s/%s", ecrHost, repo)
 
-	return ctr.WithRegistryAuth(ecrHost, "AWS", secret).Publish(ctx, ecrWithRepo)
+	return pushCtr.WithRegistryAuth(ecrHost, "AWS", secret).Publish(ctx, ecrWithRepo)
 }
