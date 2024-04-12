@@ -1,3 +1,9 @@
+// Push a container image into Amazon Elastic Container Registry (ECR)
+//
+// This module lets you push a container into ECR, automating the tedious manual steps of configuring your local docker daemon with the credentials
+//
+// For more info and sample usage, check the readme: https://github.com/lukemarsden/dagger-aws
+
 package main
 
 import (
